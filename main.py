@@ -69,7 +69,7 @@ async def original_signal():
         'hf': m['hf']
     }
     
-    encoder = jsonable_encoder(response)
+    encoder = jsonable_encoder({'data': response})
     
     return JSONResponse(content= encoder)
     
