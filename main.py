@@ -1,0 +1,94 @@
+from fastapi import FastAPI, File, UploadFile
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
+import uvicorn
+import heartpy as hb
+
+
+app = FastAPI()
+
+app.mount('/data', StaticFiles(directory="data"), name="data")
+
+
+def setup(data: any):
+    ecg = hb.get_data(data, column_name='hart')
+    ecg_time = hb.get_data(data, column_name='time')
+    sample_rate = round(hb.get_samplerate_datetime(ecg_time, timeformat='%Y-%m-%d %H:%M:%S.%f'))
+    
+    filtered = hb.filter_signal(ecg, cutoff = 0.05, sample_rate = sample_rate, filtertype='notch')
+    
+    wd, m = hb.process(hb.scale_data(filtered), sample_rate, calc_freq=True, freq_method='fft')
+    return ecg, wd, m
+
+@app.post("/upload")
+async def add_analysis(csv: UploadFile=File(...)):
+
+    # text = secure_filename(csv.filename)
+    contents = csv.file.read()
+    with open(f"./data/heart.csv", 'wb') as f:
+        f.write(contents)
+        
+    response = {
+        'status': "success"
+    }
+    
+    return response
+
+@app.get("/original")
+async def original_signal():
+    file_path = "./data/heart.csv"
+    ecg, wd, m = setup(file_path)
+    
+    original = hb.scale_data(ecg[0:1000])
+    
+    ori = [o for o in original]
+    
+    response = {
+        'ecg': ori
+    }
+    
+    encoder = jsonable_encoder(response)
+    
+    return JSONResponse(content= encoder)
+
+@app.get("/data")
+async def original_signal():
+    file_path = "./data/heart.csv"
+    ecg, wd, m = setup(file_path)
+    
+    response = {
+        'ibi': m['ibi'],
+        'sdnn': m['sdnn'],
+        'sdsd': m['sdsd'],
+        'rmssd': m['rmssd'],
+        'bpm': m['bpm'],
+        'lf': m['lf'],
+        'hf': m['hf']
+    }
+    
+    encoder = jsonable_encoder(response)
+    
+    return JSONResponse(content= encoder)
+    
+
+@app.get("/spectrum")
+async def spectrum():
+    file_path = "./data/heart.csv"
+    ecg, wd, m = setup(file_path)
+    
+    psd = [d for d in abs(wd['psd'])]
+    frq = [f for f in wd['frq']]
+    
+    response = {
+        'freq': frq,
+        'psd': psd
+    }
+    
+    encoder = jsonable_encoder(response)
+    
+    return JSONResponse(content= encoder)
+        
+
+if __name__ == "__main__":
+    uvicorn.run(app, host='0.0.0.0', port=5000)
