@@ -2,7 +2,9 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+import matplotlib.pyplot as plt
 import uvicorn
+import base64
 import heartpy as hb
 
 
@@ -76,18 +78,18 @@ async def original_signal():
 async def spectrum():
     file_path = "./data/heart.csv"
     ecg, wd, m = setup(file_path)
+
+    plt.title("Frekuensi Spektrum Sinyal Jantung")
+    plt.xlim(0,0.6)
+    plt.ylim(0, 500)
+    plt.plot(wd['frq'], abs(wd['psd']))
+    plt.xlabel("Frekuensi (Hz)")
+    plt.savefig("./images/spectrum.png")
     
-    psd = [d for d in abs(wd['psd'])]
-    frq = [f for f in wd['frq']]
-    
-    response = {
-        'freq': frq,
-        'psd': psd
-    }
-    
-    encoder = jsonable_encoder(response)
-    
-    return JSONResponse(content= encoder)
+    file_image = "./images/spectrum.png"
+    with open(file_image, "rb") as image_file:
+        encode_image = base64.b64encode(image_file.read())
+    return encode_image
         
 
 if __name__ == "__main__":
