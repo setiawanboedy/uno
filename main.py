@@ -1,11 +1,9 @@
-import glob
 from fastapi import FastAPI, File, UploadFile
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 import matplotlib.pyplot as plt
 import os
-from PIL import Image
 import uvicorn
 import base64
 import heartpy as hb
@@ -83,16 +81,15 @@ async def spectrum():
     ecg, wd, m = setup(file_path)
     
     file_image = "./images/spectrum.png"
-    image_list = glob.glob(file_image)
-    if image_list:
-        os.remove(file_image)
     
+    os.remove(file_image)
     plt.title("Frekuensi Spektrum Sinyal Jantung")
     plt.xlim(0,0.6)
     plt.ylim(0, 500)
     plt.plot(wd['frq'], abs(wd['psd']))
     plt.xlabel("Frekuensi (Hz)")
     plt.savefig(file_image)
+    plt.close()
     
     
     with open(file_image, "rb") as image_file:
