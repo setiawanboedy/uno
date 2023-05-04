@@ -16,8 +16,9 @@ app.mount('/data', StaticFiles(directory="data"), name="data")
 
 def setup(data: any):
     ecg = hb.get_data(data, column_name='hart')
-    ecg_time = hb.get_data(data, column_name='time')
-    sample_rate = round(hb.get_samplerate_datetime(ecg_time, timeformat='%Y-%m-%d %H:%M:%S.%f'))
+    # ecg_time = hb.get_data(data, column_name='time')
+    # sample_rate = round(hb.get_samplerate_datetime(ecg_time, timeformat='%Y-%m-%d %H:%M:%S.%f'))
+    sample_rate = 192
     
     filtered = hb.filter_signal(ecg, cutoff = 0.05, sample_rate = sample_rate, filtertype='notch')
     
