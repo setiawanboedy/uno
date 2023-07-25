@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 import matplotlib.pyplot as plt
-import os
+# import os
 import uvicorn
 import base64
 
@@ -242,6 +242,11 @@ async def power_spektral():
     with open(image, "rb") as image_file:
         encode_image = base64.b64encode(image_file.read())
     return encode_image
+
+# run server
+
+if __name__ == "__main__":
+    uvicorn.run(app, host='0.0.0.0', port=5000)
 
 # ========== fungsi ===========
 
