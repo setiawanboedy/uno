@@ -1,0 +1,9 @@
+fastapi
+matplotlib
+numpy
+pandas
+python-multipart
+scipy
+uvicorn
+Werkzeug
+seaborn
