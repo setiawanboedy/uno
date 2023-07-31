@@ -9,10 +9,6 @@ sudo apt-get install -y nodejs
 # Install Python dependencies and NGINX
 sudo apt-get -y install python3-pip python3-venv nginx
 
-# Create Python virtual environment and activate it
-python3 -m venv venv
-. venv/bin/activate
-
 # Install npm and pm2
 sudo apt-get install -y npm
 sudo npm install -g pm2
