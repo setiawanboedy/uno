@@ -203,7 +203,7 @@ async def frequencydomain():
         'hf': float(hf_formated)
     }
     
-    encoder = jsonable_encoder({'data': response})
+    encoder = jsonable_encoder(response)
     
     return JSONResponse(content= encoder)
     # return {"succeess"}
