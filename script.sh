@@ -26,9 +26,8 @@ pip install -r requierements.txt
 # Start the Gunicorn server with UVicorn worker using pm2
 pm2 start "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app" --name uno
 
-echo "$config_text" >> sudo tee 
-
-wget -O "/etc/nginx/conf.d/default.conf" "$file_url"
+# donwload file conf
+wget -O "/etc/nginx/conf.d/default.conf" "https://raw.githubusercontent.com/setiawanboedy/uno/mobile_server/default.conf"
 
 # Restart NGINX to apply the changes
 sudo service nginx restart
