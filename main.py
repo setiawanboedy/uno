@@ -97,7 +97,7 @@ async def deteksi_r():
     plt.close()
     
     response = {
-    'image': 'http://34.101.125.197/images/deteksi.jpg',
+    'image': 'http://localhost:5000/images/deteksi.jpg',
     }
     
     encoder = jsonable_encoder(response)
@@ -125,7 +125,7 @@ async def koreksi_interval_r():
     plt.close()
      
     response = {
-    'image': 'http://34.101.125.197/images/koreksi.jpg',
+    'image': 'http://localhost:5000/images/koreksi.jpg',
     }
     
     encoder = jsonable_encoder(response)
@@ -274,7 +274,7 @@ async def power_spektral():
     plt.close()
     
     response = {
-    'image': 'http://34.101.125.197/images/spektral.jpg',
+    'image': 'http://localhost:5000/images/spektral.jpg',
     }
     
     encoder = jsonable_encoder(response)

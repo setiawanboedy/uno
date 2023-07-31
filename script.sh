@@ -19,6 +19,10 @@ git clone -b mobile_server https://github.com/setiawanboedy/uno.git
 # Install library python
 pip install -r ./uno/requirements.txt
 
+pm2 delete uno
+
+cd /uno
+
 # Start the Gunicorn server with UVicorn worker using pm2
 pm2 start "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app" --name uno
 
@@ -26,5 +30,6 @@ pm2 start "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app" --name uno
 rm /etc/nginx/conf.d/default.conf
 wget -O "/etc/nginx/conf.d/default.conf" "https://raw.githubusercontent.com/setiawanboedy/uno/mobile_server/default.conf"
 
+sed -i '12i\'"client_max_body_size 10M;" /etc/nginx/nginx.conf
 # Restart NGINX to apply the changes
 sudo service nginx restart
