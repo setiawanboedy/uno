@@ -17,12 +17,13 @@ sudo npm install -g pm2
 git clone -b mobile_server https://github.com/setiawanboedy/uno.git
 
 # Install library python
-pip install -r /uno/requierements.txt
+pip install -r ./uno/requirements.txt
 
 # Start the Gunicorn server with UVicorn worker using pm2
 pm2 start "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app" --name uno
 
 # donwload file conf
+rm /etc/nginx/conf.d/default.conf
 wget -O "/etc/nginx/conf.d/default.conf" "https://raw.githubusercontent.com/setiawanboedy/uno/mobile_server/default.conf"
 
 # Restart NGINX to apply the changes
