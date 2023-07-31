@@ -16,9 +16,8 @@ sudo npm install -g pm2
 # clone
 git clone -b mobile_server https://github.com/setiawanboedy/uno.git
 
-cd ~/uno
 # Install library python
-pip install -r requierements.txt
+pip install -r /uno/requierements.txt
 
 # Start the Gunicorn server with UVicorn worker using pm2
 pm2 start "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app" --name uno
