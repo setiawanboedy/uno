@@ -16,6 +16,7 @@ sudo npm install -g pm2
 # clone
 git clone -b mobile_server https://github.com/setiawanboedy/uno.git
 
+cd uno
 # Install library python
 pip install -r requierements.txt
 
