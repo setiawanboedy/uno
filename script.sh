@@ -13,15 +13,15 @@ sudo apt-get -y install python3-pip python3-venv nginx
 python3 -m venv venv
 . venv/bin/activate
 
-# Install library python
-pip install -r requierements.txt
-
 # Install npm and pm2
 sudo apt-get install -y npm
 sudo npm install -g pm2
 
 # clone
 sudo git clone -b mobile_server https://github.com/setiawanboedy/uno.git
+
+# Install library python
+pip install -r requierements.txt
 
 # Start the Gunicorn server with UVicorn worker using pm2
 pm2 start "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app" --name uno
